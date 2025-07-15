@@ -1,0 +1,17 @@
+Extension: CGPA Tracker
+Version: 1.0.0
+Built: 15-07-2025 10:16:39.15
+Target: NIT JSR Students
+Website: nitjsr.vercel.app
+
+Files included:
+- manifest.json
+- popup.html
+- popup.js  
+- content.js
+- styles.css
+- Anoop.jpg
+- icons/ (if present)
+- INSTALLATION_GUIDE.md
+
+Ready for distribution!
