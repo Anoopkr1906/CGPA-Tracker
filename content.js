@@ -1,6 +1,13 @@
 // Content script to integrate with college website
 console.log('CGPA Tracker extension loaded');
 
+// Check if Chrome extension API is available
+if (!chrome || !chrome.runtime) {
+    console.error('CGPA Tracker: Chrome extension API not available. Extension may not be properly installed.');
+    // Exit early if API is not available
+    return;
+}
+
 // Function to extract CGPA data from college website
 function extractCGPAFromWebsite() {
     // This function will be customized based on your college website structure
@@ -137,6 +144,13 @@ function createFloatingButton() {
 
 // Open CGPA tracker modal
 function openCGPATracker() {
+    // Check if Chrome extension API is available
+    if (!chrome || !chrome.runtime) {
+        console.error('CGPA Tracker: Chrome extension API not available');
+        alert('CGPA Tracker extension is not properly loaded. Please refresh the page and try again.');
+        return;
+    }
+
     // Remove existing modal if any
     const existingModal = document.getElementById('cgpa-tracker-modal');
     if (existingModal) {
@@ -145,6 +159,16 @@ function openCGPATracker() {
 
     // Extract data from website
     const websiteData = extractCGPAFromWebsite();
+
+    // Get the popup URL safely
+    let popupUrl;
+    try {
+        popupUrl = chrome.runtime.getURL('popup.html');
+    } catch (error) {
+        console.error('CGPA Tracker: Error getting popup URL:', error);
+        alert('Extension error. Please refresh the page and try again.');
+        return;
+    }
 
     // Create modal
     const modal = document.createElement('div');
@@ -184,7 +208,7 @@ function openCGPATracker() {
                     ×
                 </div>
                 <iframe 
-                    src="${chrome.runtime.getURL('popup.html')}" 
+                    src="${popupUrl}" 
                     style="width: 100%; height: 600px; border: none; border-radius: 12px;"
                     id="cgpa-tracker-iframe">
                 </iframe>
@@ -303,8 +327,31 @@ window.addEventListener('message', (event) => {
 });
 
 // Initialize when page loads
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeExtension);
-} else {
+function waitForChromeApi() {
+    return new Promise((resolve) => {
+        if (chrome && chrome.runtime) {
+            resolve();
+        } else {
+            // Wait a bit and try again
+            setTimeout(() => {
+                if (chrome && chrome.runtime) {
+                    resolve();
+                } else {
+                    console.error('CGPA Tracker: Chrome extension API still not available after waiting');
+                    resolve(); // Continue anyway
+                }
+            }, 100);
+        }
+    });
+}
+
+async function initializeWhenReady() {
+    await waitForChromeApi();
     initializeExtension();
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeWhenReady);
+} else {
+    initializeWhenReady();
 }
