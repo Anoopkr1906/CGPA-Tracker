@@ -19,7 +19,7 @@ A powerful browser extension designed specifically for **college students** to c
 ### **For Students (Easy Method)**
 
 1. **Download the Extension**
-   - [Download ZIP file](https://github.com/Anoopkr1906/CGPA-Tracker/releases) 
+   - [Download Latest Release](https://github.com/Anoopkr1906/GCPA-Tracker/releases/latest) 
    - Extract to a folder on your computer
 
 2. **Install in Chrome**
