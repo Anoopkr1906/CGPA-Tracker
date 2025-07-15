@@ -80,30 +80,6 @@ Target CGPA: 8.0
 - CSS3 with modern animations
 - Chrome Storage API for data persistence
 
-### **File Structure**
-```
-CGPA-Tracker/
-├── manifest.json       # Extension configuration
-├── popup.html         # Main UI
-├── popup.js           # Calculation logic
-├── content.js         # Website integration  
-├── styles.css         # Styling
-├── Anoop.jpg          # Profile image
-└── icons/             # Extension icons
-```
-
-### **Key Functions**
-```javascript
-// Main calculation logic
-calculateRequiredCGPA(currentCGPA, completedSem, totalSem, targetCGPA)
-
-// Website data extraction
-extractCGPAFromWebsite()
-
-// Auto-fill functionality
-autoFillFromWebsite(data)
-```
-
 ## 🔒 **Privacy & Security**
 
 - ✅ **100% Local**: No data leaves your device
