@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "CGPA Tracker",
+  "version": "1.0.0",
+  "description": "Help students calculate required CGPA for upcoming semesters to reach their target CGPA",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "CGPA Tracker"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://nitjsr.vercel.app/*",
+        "*://*.nitjsr.vercel.app/*"
+      ],
+      "js": ["content.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["popup.html", "styles.css", "Anoop.jpg"],
+      "matches": [
+        "*://nitjsr.vercel.app/*",
+        "*://*.nitjsr.vercel.app/*"
+      ]
+    }
+  ]
+}

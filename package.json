@@ -1,0 +1,26 @@
+{
+  "name": "cgpa-tracker-extension",
+  "version": "1.0.0",
+  "description": "Browser extension to help students calculate required CGPA for upcoming semesters",
+  "main": "popup.js",
+  "scripts": {
+    "build": "echo 'Extension ready for loading'",
+    "test": "echo 'No tests specified'",
+    "lint": "echo 'No linting configured'",
+    "package": "zip -r cgpa-tracker-extension.zip . -x node_modules/\\* .git/\\* *.zip"
+  },
+  "keywords": [
+    "cgpa",
+    "gpa",
+    "calculator",
+    "students",
+    "college",
+    "university",
+    "academic",
+    "tracker"
+  ],
+  "author": "College Student",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {}
+}
