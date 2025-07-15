@@ -2,10 +2,12 @@
 console.log('CGPA Tracker extension loaded');
 
 // Check if Chrome extension API is available
-if (!chrome || !chrome.runtime) {
-    console.error('CGPA Tracker: Chrome extension API not available. Extension may not be properly installed.');
-    // Exit early if API is not available
-    return;
+function checkChromeAPI() {
+    if (!chrome || !chrome.runtime) {
+        console.error('CGPA Tracker: Chrome extension API not available. Extension may not be properly installed.');
+        return false;
+    }
+    return true;
 }
 
 // Function to extract CGPA data from college website
@@ -71,6 +73,15 @@ function extractNumberFromText(text) {
 
 // Create floating CGPA tracker button
 function createFloatingButton() {
+    console.log('CGPA Tracker: Creating floating button...');
+    
+    // Check if button already exists
+    const existingButton = document.getElementById('cgpa-tracker-btn');
+    if (existingButton) {
+        console.log('CGPA Tracker: Button already exists, removing old one');
+        existingButton.remove();
+    }
+    
     // Smart positioning to avoid common website elements
     let topPosition = '80px'; // Default position
     
@@ -136,17 +147,18 @@ function createFloatingButton() {
 
     // Add click handler
     btnElement.addEventListener('click', () => {
+        console.log('CGPA Tracker: Button clicked!');
         openCGPATracker();
     });
 
     document.body.appendChild(button);
+    console.log('CGPA Tracker: Floating button created and added to page');
 }
 
 // Open CGPA tracker modal
 function openCGPATracker() {
     // Check if Chrome extension API is available
-    if (!chrome || !chrome.runtime) {
-        console.error('CGPA Tracker: Chrome extension API not available');
+    if (!checkChromeAPI()) {
         alert('CGPA Tracker extension is not properly loaded. Please refresh the page and try again.');
         return;
     }
@@ -260,9 +272,14 @@ function openCGPATracker() {
 
 // Initialize the extension
 function initializeExtension() {
+    console.log('CGPA Tracker: Starting initialization...');
+    
     // Check if we're on your specific college website
     const currentDomain = window.location.hostname.toLowerCase();
     const currentUrl = window.location.href.toLowerCase();
+    
+    console.log('CGPA Tracker: Current domain:', currentDomain);
+    console.log('CGPA Tracker: Current URL:', currentUrl);
     
     // Add your college website domains here
     const allowedDomains = [
@@ -273,6 +290,8 @@ function initializeExtension() {
     const isAllowedWebsite = allowedDomains.some(domain => 
         currentDomain.includes(domain) || currentDomain.endsWith(domain)
     );
+    
+    console.log('CGPA Tracker: Is allowed website:', isAllowedWebsite);
     
     // Only show button on allowed websites
     if (isAllowedWebsite) {
@@ -288,6 +307,7 @@ function initializeExtension() {
         }
     } else {
         console.log('CGPA Tracker: Not on allowed website, extension inactive');
+        console.log('CGPA Tracker: Expected domain: nitjsr.vercel.app, Got:', currentDomain);
     }
 }
 
@@ -348,12 +368,12 @@ window.addEventListener('message', (event) => {
 // Initialize when page loads
 function waitForChromeApi() {
     return new Promise((resolve) => {
-        if (chrome && chrome.runtime) {
+        if (checkChromeAPI()) {
             resolve();
         } else {
             // Wait a bit and try again
             setTimeout(() => {
-                if (chrome && chrome.runtime) {
+                if (checkChromeAPI()) {
                     resolve();
                 } else {
                     console.error('CGPA Tracker: Chrome extension API still not available after waiting');
@@ -366,7 +386,13 @@ function waitForChromeApi() {
 
 async function initializeWhenReady() {
     await waitForChromeApi();
-    initializeExtension();
+    
+    // Only initialize if Chrome API is available
+    if (checkChromeAPI()) {
+        initializeExtension();
+    } else {
+        console.log('CGPA Tracker: Skipping initialization due to missing Chrome API');
+    }
 }
 
 if (document.readyState === 'loading') {
