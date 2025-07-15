@@ -9,7 +9,17 @@
   ],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "CGPA Tracker"
+    "default_title": "CGPA Tracker",
+    "default_icon": {
+      "16": "images/logo1.png",
+      "48": "images/logo1.png",
+      "128": "images/logo1.png"
+    }
+  },
+  "icons": {
+    "16": "images/logo1.png",
+    "48": "images/logo1.png",
+    "128": "images/logo1.png"
   },
   "content_scripts": [
     {
@@ -22,7 +32,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["popup.html", "styles.css", "Anoop.jpg"],
+      "resources": ["popup.html", "styles.css", "Anoop.jpg", "images/logo1.png"],
       "matches": [
         "*://nitjsr.vercel.app/*",
         "*://*.nitjsr.vercel.app/*"
