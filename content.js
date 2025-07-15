@@ -173,57 +173,76 @@ function openCGPATracker() {
     // Create modal
     const modal = document.createElement('div');
     modal.id = 'cgpa-tracker-modal';
-    modal.innerHTML = `
-        <div style="
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 10001;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        ">
-            <div style="
-                background: white;
-                padding: 0;
-                border-radius: 12px;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-                width: 400px;
-                max-height: 90vh;
-                overflow-y: auto;
-                position: relative;
-            ">
-                <div style="
-                    position: absolute;
-                    top: 15px;
-                    right: 15px;
-                    cursor: pointer;
-                    font-size: 24px;
-                    color: #666;
-                    z-index: 10002;
-                " onclick="document.getElementById('cgpa-tracker-modal').remove()">
-                    ×
-                </div>
-                <iframe 
-                    src="${popupUrl}" 
-                    style="width: 100%; height: 600px; border: none; border-radius: 12px;"
-                    id="cgpa-tracker-iframe">
-                </iframe>
-            </div>
-        </div>
+    
+    // Create overlay
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 10001;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     `;
+    
+    // Create modal content
+    const modalContent = document.createElement('div');
+    modalContent.style.cssText = `
+        background: white;
+        padding: 0;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        width: 400px;
+        max-height: 90vh;
+        overflow-y: auto;
+        position: relative;
+    `;
+    
+    // Create close button
+    const closeButton = document.createElement('div');
+    closeButton.style.cssText = `
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        cursor: pointer;
+        font-size: 24px;
+        color: #666;
+        z-index: 10002;
+    `;
+    closeButton.textContent = '×';
+    closeButton.onclick = () => {
+        document.getElementById('cgpa-tracker-modal').remove();
+    };
+    
+    // Create iframe
+    const iframe = document.createElement('iframe');
+    iframe.id = 'cgpa-tracker-iframe';
+    iframe.src = popupUrl;
+    iframe.style.cssText = `
+        width: 100%;
+        height: 600px;
+        border: none;
+        border-radius: 12px;
+    `;
+    
+    // Assemble modal
+    modalContent.appendChild(closeButton);
+    modalContent.appendChild(iframe);
+    overlay.appendChild(modalContent);
+    modal.appendChild(overlay);
 
     document.body.appendChild(modal);
 
     // Auto-fill data if found on website
     if (websiteData.found) {
         setTimeout(() => {
-            const iframe = document.getElementById('cgpa-tracker-iframe');
-            if (iframe && iframe.contentWindow) {
-                iframe.contentWindow.postMessage({
+            const iframeElement = document.getElementById('cgpa-tracker-iframe');
+            if (iframeElement && iframeElement.contentWindow) {
+                iframeElement.contentWindow.postMessage({
                     type: 'autofill',
                     data: websiteData
                 }, '*');
@@ -232,8 +251,8 @@ function openCGPATracker() {
     }
 
     // Close modal when clicking outside
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
             modal.remove();
         }
     });
